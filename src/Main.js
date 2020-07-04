@@ -3,7 +3,6 @@ import {
   CssBaseline
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import AppContainer from 'app/components/AppContainer/AppContainer';
 import PDFMergePage from 'app/pages/PDFMergePage/PDFMergePage';
 
 
@@ -25,13 +24,30 @@ const appStyles = (theme) => ({
 });
 
 class Main extends React.Component {
+  state = {
+    width: 0
+  };
+
+  componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions = () => {
+    this.setState({
+      width: window.innerWidth,
+    });
+  }
+
   render () {
     return (
       <>
         <CssBaseline/>
-        <AppContainer>
-          <PDFMergePage/>
-        </AppContainer>
+        <PDFMergePage windowWidth={this.state.width}/>
       </>
     )
   }
